@@ -14,7 +14,7 @@ function checkLoggedIn() {
     
 
 
-function searchForMemes() {
+function searchForMemes($userID = '') {
     global $dbConn; 
     
     $sql = "SELECT 
@@ -25,6 +25,12 @@ function searchForMemes() {
       ON all_memes.category_id = categories.category_id 
       WHERE 1"; 
     
+    if (!empty($userID)) {
+      $sql .= " AND user_id = '$userID'"; 
+    }
+    
+
+
     if(isset($_POST['search'])) {
       // query the databse for any records that match this search
       $sql .= " AND (line1 LIKE '%{$_POST['search']}%' OR line2 LIKE '%{$_POST['search']}%')";
@@ -84,9 +90,10 @@ function insertMeme($line1, $line2, $categoryID) {
     global $dbConn; 
     
     $sql = "INSERT INTO `all_memes` 
-      (`id`, `line1`, `line2`, `category_id`, `create_date`) 
+      (`id`, `line1`, `line2`, `category_id`, `create_date`, `user_id`) 
       VALUES 
-      (NULL, '$line1', '$line2', '$categoryID', NOW());"; 
+      (NULL, '$line1', '$line2', '$categoryID', NOW(), '{$_SESSION['user_id']}');"; 
+
     
     $statement = $dbConn->prepare($sql); 
     $result = $statement->execute(); 
