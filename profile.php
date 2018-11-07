@@ -23,7 +23,7 @@ checkLoggedIn();
     <div class="memes-container">
       <?php 
          $myMemes = searchForMemes($_SESSION["user_id"]);
-         displayMemes($myMemes); 
+         displayMemes($myMemes, true); 
       ?>
     <div style="clear:both"></div>
 
